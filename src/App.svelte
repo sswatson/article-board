@@ -125,6 +125,9 @@
 </section>
 
 <style>
+		:root {
+			font-size: 10px;
+		}
     .board {
         height: calc(100vh - 100px);
         width: 100%;
@@ -133,7 +136,7 @@
     }
     .column {
         height: 100%;
-        width: 250px;
+        width: 200px;
         padding: 0.5em;
         margin: 0.5em;
         float: left;
@@ -143,7 +146,7 @@
         overflow-y: hidden;
     }
     .column-content {
-        height: calc(100% - 60px);
+        height: calc(100% - 40px);
         /* Notice that the scroll container needs to be the dndzone if you want dragging near the edge to trigger scrolling */
         overflow-y: scroll;
 			display: flex;
@@ -157,7 +160,7 @@
         align-items: center;
     }
     .card {
-			width: 225px;
+			width: 175px;
 			background-color: #2563eb;
 			color: white;
 			padding: 12px;
