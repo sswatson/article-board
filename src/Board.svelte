@@ -73,7 +73,7 @@
 
 <style>
   .board {
-    height: calc(100vh - 70px);
+    height: calc(100vh - 90px);
     width: 100%;
     padding: 0.5em;
     margin-bottom: 40px;
