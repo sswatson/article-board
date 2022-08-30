@@ -4,6 +4,8 @@
 	let editMode = false;
 	
 	let board = [];
+
+	let tag="";
 	
 	onMount(async () => {
 		const res = await fetch("https://sswatson.firebaseio.com/raidocs/board.json");
@@ -32,6 +34,10 @@
 	}
 
 	async function writeBoardState() {
+		if (tag === "") {
+			alert("Please enter a tag to make your saved model easier to find later. You can re-use tags.");
+			return;
+		}
 		const writeBoard = board.map((col, j) => ({...col, id: j}));
 		console.log(writeBoard);
 		const boardString = JSON.stringify(writeBoard);
@@ -45,8 +51,8 @@
 		
 		const dateString = (new Date()).toISOString().replace(/[:\.]/g, '-');
 		
-		const res = await fetch(`https://sswatson.firebaseio.com/raidocs/board-history/${dateString}.json`, {
-			body: `{ "state": ${boardString} }`,
+		const res = await fetch(`https://sswatson.firebaseio.com/raidocs/board-history/${dateString}-${tag}.json`, {
+			body: `{ "state": ${boardString}, "tag": "${tag}" }`,
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
@@ -60,6 +66,10 @@
 	on:click={addBoard}>
 	new category
 </button>
+
+<input
+	placeholder="tag for saved model..."
+	bind:value={tag}/>
 
 <button on:click={writeBoardState}>
 	save
