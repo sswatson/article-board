@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import Board from './Board.svelte';
+	let editMode = false;
 	
 	let board = [];
 	
@@ -14,6 +15,7 @@
 				items: [],
 			}
 		});
+		console.log(board);
 	})
 	
 	function addBoard() {
@@ -63,4 +65,12 @@
 	save
 </button>
 
-<Board bind:columnItems={board}/>
+<button on:click={() => editMode = !editMode}>
+	{#if editMode}
+		done editing
+	{:else}
+		edit
+	{/if}
+</button>
+
+<Board bind:columnItems={board} editMode={editMode}/>
