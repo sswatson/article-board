@@ -3,6 +3,7 @@
   export let editMode;
   import { flip } from "svelte/animate";
   import { dndzone } from "svelte-dnd-action";
+import Card from "./Card.svelte";
   const flipDurationMs = 300;
   function handleDndConsiderColumns(e) {
     columnItems = e.detail.items;
@@ -75,34 +76,12 @@
         on:finalize={(e) => handleDndFinalizeCards(column.id, e)}
       >
         {#each column.items as item (item.id)}
-          <div
-            class="card"
-            animate:flip={{ duration: flipDurationMs }}
+        <div animate:flip={{ duration: flipDurationMs }}>
+          <Card
             on:click={handleClick}
-          >
-            {#if editMode}
-              <button
-                on:click={() => {
-                  column.items = column.items.filter(
-                    (i) => i.id !== item.id
-                  );
-                }}
-                class="card-delete-button">
-                del
-              </button>
-            {/if}
-            {#if editMode}
-              <input value={item.name} on:change={(e) => (item.name = item.id = e.target.value)} />
-            {:else}
-              { item.name }
-            {/if}
-            <div class="description">
-              {#if editMode}
-                <textarea value={item.description} on:change={(e) => (item.description = e.target.value)}/>
-              {:else}
-                { item.description }
-              {/if}
-            </div>
+            bind:column={column}
+            bind:item={item}
+            />
           </div>
         {/each}
         <div class="button-container">
@@ -154,36 +133,11 @@
     justify-content: center;
     align-items: center;
   }
-  .card {
-    position: relative;
-    width: 175px;
-    background-color: #2563eb;
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-  }
-
-  .description {
-    font-size: 10px;
-    color: #fafafa;
-    margin-top: 6px;
-  }
 
   .delete-button {
     font-size: 11px;
     background-color: transparent;
     border: none;
-  }
-
-  .card-delete-button {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    color: white;
-    background-color: transparent;
-    padding: 1px;
-    border: none;
-    cursor: pointer;
   }
 
   .button-container {
@@ -200,14 +154,5 @@
     padding-bottom: 2px;
     width: 50%;
     color: #2563eb;
-  }
-
-  .card input, .card textarea {
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background-color: transparent;
-    color: white;
-    padding: 2px;
-    margin-top: 2px;
-    margin-bottom: 2px;
   }
 </style>

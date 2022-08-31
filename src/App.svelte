@@ -1,7 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import Board from './Board.svelte';
+	import SavedModels from './SavedModels.svelte';
 	let editMode = false;
+	let showSavedModels = false;
+	let savedModels = [];
 	
 	let board = [];
 
@@ -58,13 +61,38 @@
 			},
 			method: "PUT"
 		});
+
+	}
+	
+	async function getSavedModels() {
+		const res = await fetch("https://sswatson.firebaseio.com/raidocs/board-history.json");
+		const history = await res.json();
+		savedModels = [...Object.keys(history)]
+			.map(key => ({ key, ...history[key] }))
+			.filter(obj => Boolean(obj.tag));
+		console.log(savedModels);
+	}
+
+	$: if (showSavedModels) {
+		getSavedModels();
+	}
+
+	function loadModel(key) {
+		const matchingModels = savedModels.filter( model => model.key === key);
+		if (matchingModels.length === 0) {
+			alert("No matching model found");
+			return;
+		}
+		const [model] = matchingModels;
+		board = model.state;
+		showSavedModels = false;
 	}
 	
 </script>
 
 <button
 	on:click={addBoard}>
-	new category
+	new column
 </button>
 
 <input
@@ -72,15 +100,29 @@
 	bind:value={tag}/>
 
 <button on:click={writeBoardState}>
-	save
+	save this model
 </button>
 
 <button on:click={() => editMode = !editMode}>
 	{#if editMode}
 		done editing
 	{:else}
-		edit
+		edit column titles
 	{/if}
 </button>
 
-<Board bind:columnItems={board} editMode={editMode}/>
+{#if showSavedModels}
+	<button on:click={() => showSavedModels = false}>
+		done
+	</button>
+{:else}
+	<button on:click={() => showSavedModels = true}>
+		view list of saved models
+	</button>
+{/if}
+
+{#if showSavedModels}
+	<SavedModels models={savedModels} {loadModel}/>
+{:else}
+	<Board bind:columnItems={board} editMode={editMode}/>
+{/if}
