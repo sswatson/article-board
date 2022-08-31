@@ -1,9 +1,9 @@
 <script>
   export let columnItems;
-  export let editMode;
+  let editMode = new Set();
   import { flip } from "svelte/animate";
   import { dndzone } from "svelte-dnd-action";
-import Card from "./Card.svelte";
+  import Card from "./Card.svelte";
   const flipDurationMs = 300;
   function handleDndConsiderColumns(e) {
     columnItems = e.detail.items;
@@ -50,13 +50,20 @@ import Card from "./Card.svelte";
   {#each columnItems as column (column.id)}
     <div class="column" animate:flip={{ duration: flipDurationMs }}>
       <div class="column-title">
-        {#if editMode}
+        {#if editMode.has(column.id)}
           <input
+            class="column-title-input"
             value={column.name}
             on:change={(e) => (column.name = e.target.value)}
+            on:blur={() => {editMode.delete(column.id); editMode = editMode;}}
           />
         {:else}
-          <div class="column-name">
+          <div 
+            on:click={() => {
+              editMode.add(column.id);
+              editMode = editMode;
+            }}
+            class="column-name">
             {column.name}
           </div>
         {/if}
@@ -154,5 +161,14 @@ import Card from "./Card.svelte";
     padding-bottom: 2px;
     width: 50%;
     color: #2563eb;
+  }
+
+  .column-title-input {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #2d3748;
+    background-color: transparent;
+    width: 100%;
+    text-align: center;
   }
 </style>

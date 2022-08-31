@@ -8,12 +8,11 @@
 	
 	// Initial value
 	export let id = uuid();
-	export let value = '#5E7ABC';
+	export let value = '#2563EB';
 
 	// Our color set
 	let values = [
-		['#DAAFE9', '#C7DBF5', '#AAD5FB', '#ADE5DA', '#B0EDC3', '#FDF0A4', '#F8D6A2'],
-		['#C47ADA', '#90BAEE', '#75BAFA', '#72D5BF', '#73DE8C', '#FBE66E', '#F5B969'],
+		['#2563EB', '#C47ADA', '#75BAFA', '#72D5BF', '#73DE8C', '#F5B969'],
 		['#AE44B7', '#5E7ABC', '#5E7ABC', '#4DACA9', '#63B75A', '#EDBD4A', '#EC9740'],
 		['#501B87', '#021B6B', '#0C2794', '#337277', '#2F6A52', '#AE802F', '#AD6127']
   ]

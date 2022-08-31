@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import Board from './Board.svelte';
 	import SavedModels from './SavedModels.svelte';
-	let editMode = false;
 	let showSavedModels = false;
 	let savedModels = [];
 	
@@ -90,30 +89,19 @@
 	
 </script>
 
-<button
-	on:click={addBoard}>
-	new column
-</button>
+{#if !showSavedModels}
+	<input
+		placeholder="tag for saved model..."
+		bind:value={tag}/>
 
-<input
-	placeholder="tag for saved model..."
-	bind:value={tag}/>
-
-<button on:click={writeBoardState}>
-	save this model
-</button>
-
-<button on:click={() => editMode = !editMode}>
-	{#if editMode}
-		done editing
-	{:else}
-		edit column titles
-	{/if}
-</button>
+	<button on:click={writeBoardState}>
+		save this model
+	</button>
+{/if}
 
 {#if showSavedModels}
 	<button on:click={() => showSavedModels = false}>
-		done
+		back
 	</button>
 {:else}
 	<button on:click={() => showSavedModels = true}>
@@ -121,8 +109,15 @@
 	</button>
 {/if}
 
+{#if !showSavedModels}
+	<button
+		on:click={addBoard}>
+		new column
+	</button>
+{/if}
+
 {#if showSavedModels}
 	<SavedModels models={savedModels} {loadModel}/>
 {:else}
-	<Board bind:columnItems={board} editMode={editMode}/>
+	<Board bind:columnItems={board}/>
 {/if}
